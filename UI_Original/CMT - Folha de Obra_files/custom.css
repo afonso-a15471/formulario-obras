@@ -1,0 +1,105 @@
+#loadingPopup {
+    position:absolute;
+    top:40%;
+    left:45%;
+    display:none;
+    z-index: 10;
+    border:1px solid black;
+    padding:20px;
+    text-align:center;
+    font: 13px verdana, arial, helvetica, sans-serif;
+    font-weight:bold;
+    color:#003366;
+		background-color: #ffffff;
+}
+
+.buttons-copy, .buttons-csv, .buttons-excel, .buttons-print, .buttons-pdf{
+	margin-right:2px;
+}
+
+div.sidebar{
+	margin-top: 1px!important;
+}
+
+
+.table td.tdSeparator{
+    background-color: #c88542;
+}
+
+
+.table  tr.warningDark  td{
+	background-color: #f8ff84;
+}
+
+.tooltip-inner {
+   text-align:left;
+}
+
+.btn-xxs {
+	padding: 1px 5px;
+	font-size: 10px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+
+a.app_square{
+    color: #ffffff!important;
+}
+
+a.app_square:hover{
+    color: #cccccc!important;
+    cursor: pointer!important;
+    text-decoration: underline!important;
+}
+
+/* hack to select2 get width 100% */
+
+div.select2_100 span.select2{
+    width: 100%!important;
+}
+
+div.select2_50 span.select2{
+    width: 50%!important;
+}
+
+li.sidebar-appname{
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 1px;
+	padding-bottom: 5px;
+}
+
+/*
+.label-monitorizacao_E1 {
+    background-color: #d9534f;
+}
+*/
+
+.label-big{
+    font-size: 20px;
+}
+.label-pretolblue {
+    background-color: #188d91;
+}
+.label-seablue {
+    background-color: #3C78D8;
+}
+.label-purple {
+    background-color: #DA70D6;
+}
+.label-orange {
+    background-color: #EF864D;
+}
+
+.panel-primary .panel-footer{
+	color: #337ab7;
+}
+.panel-yellow .panel-footer{
+	color: #f0ad4e;
+}
+.panel-green .panel-footer{
+	color: #5cb85c;
+}
+.panel-red .panel-footer{
+	color: #d9534f;
+}

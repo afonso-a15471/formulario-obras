@@ -1,0 +1,1726 @@
+
+//Loading popup
+function showLoadingPopup(){
+    $('#loadingPopup').show();
+}
+
+function hideLoadingPopup(){
+    $('#loadingPopup').hide();
+}
+
+function scrollToDIV(divID){
+
+  $('html, body').animate({
+    scrollTop: $("#"+divID).offset().top
+  });
+
+}
+
+function modalEvento(id_evento){
+
+  showLoadingPopup()
+  var request = $.ajax({
+      url: '../../../../gestaoeventos/modules/evento/php/modal_evento.php',
+      type: "POST",
+      data: {id_evento: id_evento,action:'view',init_local: 0},
+      dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+  });
+  request.fail(function(jqXHR, textStatus) {
+    hideLoadingPopup();
+    alert("Erro ao executar modalEvento: " + textStatus);
+  });
+
+}
+
+function changeFolhaObraTabContent(id_folhaobra){
+
+  showLoadingPopup();
+  var file = $('#tabSelect').val();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/'+file+'.php',
+	  type: "POST",
+	  data: {id_folhaobra: id_folhaobra, openFrom: 'tab'},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+        $('#toShow').html(msg);
+
+        if(file=='tab_caracterizacao'){
+            $('#data_inicial').datetimepicker({
+    							format: 'YYYY-MM-DD',
+    							locale: 'pt'
+    					});
+            $('#data_final').datetimepicker({
+    							format: 'YYYY-MM-DD',
+    							locale: 'pt'
+    					});
+            $('#data_conclusao_fo').datetimepicker({
+    							format: 'YYYY-MM-DD',
+    							locale: 'pt'
+    					});
+        }
+
+        $('#id_d_nomeobra').select2();
+        $('#id_d_origem_pedido').select2();
+        $('#id_d_locais').select2();
+        $('#id_toponimia').select2();
+        $('#id_req_interno').select2();
+        $('#id_documentacao').select2();
+
+	});
+
+	request.fail(function(jqXHR, textStatus) {
+	  alert("Erro ao executar changeFolhaObraTabContent: " + textStatus);
+	});
+    hideLoadingPopup();
+
+}
+
+function editCoordDescricao(id_folhaobra,id_folhaobra_coords,divID){
+
+    var txt=$('#'+divID+'_value').val();
+    var form='<div class="input-group">';
+    form+='<input class="form-control" type="text" name="'+divID+'_input" id="'+divID+'_input" value="'+txt+'" />';
+    form+='<span class="input-group-btn">';
+    form+='<button type="button" class="btn btn-info" onclick="saveEditCoordDescricao('+id_folhaobra+','+id_folhaobra_coords+',\''+divID+'\')"><i class="fa fa-save"></i></button>';
+    form+='<button type="button" class="btn btn-warning" onclick="closeEditCoordDescricao(\''+divID+'\')"><i class="fa fa-times"></i></button>';
+    form+='</span>';
+    form+='</div>';
+    $('#'+divID).html(form);
+
+}
+
+function closeEditCoordDescricao(divID){
+
+  var txt=$('#'+divID+'_value').val();
+  $('#'+divID).html(txt);
+
+
+}
+
+function folhaObraCorrigirToponimia(id_folhaobra,id_folhaobra_coords,divID){
+
+  showLoadingPopup();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/update_fo_toponimia.php',
+	  type: "POST",
+	  data: {id_folhaobra: id_folhaobra,id_folhaobra_coords:id_folhaobra_coords},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+
+    $('#'+divID).html(msg);
+    hideLoadingPopup();
+
+  });
+  request.fail(function(jqXHR, textStatus) {
+    hideLoadingPopup();
+	  alert("Erro ao executar saveEditCoordDescricao: " + textStatus);
+	});
+
+}
+
+function saveEditCoordDescricao(id_folhaobra,id_folhaobra_coords,divID){
+
+  showLoadingPopup();
+
+  var descricao=$('#'+divID+'_input').val();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/update_coords_descricao.php',
+	  type: "POST",
+	  data: {id_folhaobra: id_folhaobra,id_folhaobra_coords:id_folhaobra_coords,descricao:descricao},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+
+    if(msg==1)
+      $('#'+divID).html(descricao);
+    else
+      alert('Erro a gravar dados'+msg);
+
+  });
+  request.fail(function(jqXHR, textStatus) {
+	  alert("Erro ao executar saveEditCoordDescricao: " + textStatus);
+	});
+    hideLoadingPopup();
+
+}
+
+
+function folhaobraChangeReq(){
+
+    if($('#trAlterarReq_1').css('display')=='none'){
+        $('#trAlterarReq_1').show();
+        //$('#trAlterarReq_2').show();
+    }
+    else{
+        $('#trAlterarReq_1').hide();
+        //$('#trAlterarReq_2').hide();
+    }
+
+}
+
+function resetRelatorioOrderBy(){
+
+    $('#orderByDIV').html('');
+
+}
+
+function folhaObraConverterCoords(id_folhaobra,id_folhaobra_coords,divID){
+
+  showLoadingPopup();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/return_converter_coords.php',
+	  type: "POST",
+	  data: {id_folhaobra: id_folhaobra,id_folhaobra_coords:id_folhaobra_coords},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+      $('#'+divID).html(msg);
+  });
+  request.fail(function(jqXHR, textStatus) {
+	  alert("Erro ao executar folhaObraConverterCoords: " + textStatus);
+	});
+    hideLoadingPopup();
+
+}
+
+function form_checkNomeObra(valor){
+
+  showLoadingPopup();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/form_checknomeobra.php',
+	  type: "POST",
+	  data: {valor: valor},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+      $('#showNomeObraInfo').html(msg);
+  });
+  request.fail(function(jqXHR, textStatus) {
+	  alert("Erro ao executar form_checkNomeObra: " + textStatus);
+	});
+    hideLoadingPopup();
+
+}
+
+function form_showAjudaNomeObra(valor,showAjudaDIV,path){
+
+    showLoadingPopup();
+  
+      var request = $.ajax({
+        url: path+'modules/folhaobra/files/php/return_ajudanomeobra.php',
+        type: "POST",
+        data: {valor: valor},
+        dataType: "html"
+      });
+  
+      request.done(function(msg) {
+        $('#'+showAjudaDIV).html(msg);
+    });
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar form_showAjudaNomeObra: " + textStatus);
+      });
+      hideLoadingPopup();
+  
+  }
+
+function form_checkNomeObraInterrupTransito(valor){
+
+  showLoadingPopup();
+  var file = $('#tabSelect').val();
+
+	var request = $.ajax({
+	  url: 'modules/folhaobra/files/php/form_checkinttransito.php',
+	  type: "POST",
+	  data: {valor: valor},
+	  dataType: "html"
+	});
+
+	request.done(function(msg) {
+
+        if(msg==1){
+            $('#panelIntTransDIV').show();
+            /*
+            $('#id_d_inttran_tipo').prop('disabled', false);
+            $('#inttran_motivo').prop('disabled', false);
+            $('#inttran_ocupacao').prop('disabled', false);
+            $('#inttran_data_inicial').prop('disabled', false);
+            $('#inttran_hora_inicial').prop('disabled', false);
+            $('#inttran_data_final').prop('disabled', false);
+            $('#inttran_hora_final').prop('disabled', false);
+            */
+        }
+        else{
+            $('#panelIntTransDIV').hide();
+            /*
+            $('#id_d_inttran_tipo').prop('disabled', true);
+            $('#inttran_motivo').prop('disabled', true);
+            $('#inttran_ocupacao').prop('disabled', true);
+            $('#inttran_data_inicial').prop('disabled', true);
+            $('#inttran_hora_inicial').prop('disabled', true);
+            $('#inttran_data_final').prop('disabled', true);
+            $('#inttran_hora_final').prop('disabled', true);
+            */
+        }
+
+	});
+
+	request.fail(function(jqXHR, textStatus) {
+	  alert("Erro ao executar form_checkNomeObraInterrupTransito: " + textStatus);
+	});
+    hideLoadingPopup();
+
+}
+
+//alterar tipo de resposta
+function form_tiporequerente(valor,divId,tipo){
+
+
+    //if(valor!=''){
+
+      showLoadingPopup();
+
+        var request = $.ajax({
+          url: 'modules/folhaobra/files/php/form_tiporequerente.php',
+          type: "POST",
+          data: {valor: valor, tipo: tipo},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divId).html(msg);
+            $('#id_req_interno').select2();
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar form_tiporequerente: " + textStatus);
+        });
+        hideLoadingPopup();
+
+        /*
+    }
+    else{
+        var msg='- Escolha um tipo -';
+        $('#'+divId).html(msg);
+    }
+    */
+
+
+}
+
+//alterar tipo de doc
+function form_tipodoc(valor,divId){
+
+    if(valor!=''){
+
+      showLoadingPopup();
+
+        var request = $.ajax({
+          url: 'modules/folhaobra/files/php/form_tipodoc.php',
+          type: "POST",
+          data: {valor: valor},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divId).html(msg);
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar form_tipodoc: " + textStatus);
+        });
+        hideLoadingPopup();
+
+    }
+    else{
+        var msg='- Escolha um tipo -';
+        $('#'+divId).html(msg);
+    }
+
+}
+
+/*
+//filtrar locais
+function form_locais(inputID,divId){
+
+    var valor = '';
+    valor = $('#'+inputID).value;
+
+      showLoadingPopup();
+
+        var request = $.ajax({
+          url: 'modules/folhaobra/files/php/form_locais.php',
+          type: "POST",
+          data: {valor: valor},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divId).html(msg);
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar form_locais: " + textStatus);
+        });
+        hideLoadingPopup();
+
+}
+
+
+//filtrar toponimia
+function form_toponimia(inputID,divId){
+
+    var valor = '';
+    valor = $('#'+inputID).value;
+
+      showLoadingPopup();
+
+        var request = $.ajax({
+          url: 'modules/folhaobra/files/php/form_toponimia.php',
+          type: "POST",
+          data: {valor: valor},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divId).html(msg);
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar form_toponimia: " + textStatus);
+        });
+        hideLoadingPopup();
+
+}
+*/
+
+//Mostrar combobox com os subtipos no form a minha rua
+function form_subtipo(valor,divId){
+
+    if(valor!=''){
+
+
+      showLoadingPopup();
+
+        var request = $.ajax({
+          url: 'modules/folhaobra/files/php/form_subtipo.php',
+          type: "POST",
+          data: {valor: valor},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divId).html(msg);
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar form_subtipo: " + textStatus);
+        });
+        hideLoadingPopup();
+
+
+    }
+    else{
+        $(divId).innerHTML = '- Escolha um tipo -';
+    }
+
+}
+
+function nifSelectToInput(value){
+
+    if(value!=''){
+        $('#nif').val(value);
+    }
+    else{
+        $('#nif').val('');
+    }
+
+}
+
+function checkAll(value,id,max){
+
+    var i=1;
+    var tmp='';
+    for(i=1;i<=max;i++){
+        tmp='#check_'+id+'_'+i;
+        if($(tmp))
+            $(tmp).checked=value;
+    }
+
+}
+
+function changeInfoPai(value,divID){
+
+
+  showLoadingPopup();
+
+    var request = $.ajax({
+      url: 'modules/configuracoes/files/php/return_infopai.php',
+      type: "POST",
+      data: {value: value},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divId).html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar changeInfoPai: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function showGroupActionAll(action,divList){
+
+    var tmpList = divList;
+    var i=0;
+    var temp = new Array();
+    temp = tmpList.split(';');
+    var tempLength = temp.length;
+    for(i=0;i<tempLength;i++){
+        if(temp[i]!=''){
+              if($('#'+temp[i])){
+                    if(action=='open'){
+                        $('#'+temp[i]).style.display='block';
+                    }
+                    else{
+                        $('#'+temp[i]).style.display='none';
+                    }
+              }
+        }
+    }
+
+}
+
+function searchEntidadeDiv(value){
+
+    if(value=='simple'){
+
+        $('#searchSimpleDiv').style.display='block';
+        $('#searchAdvancedDiv').style.display='none';
+
+        //new Effect.Fade('searchAdvancedDiv', {duration:0.5, from:1, to:0});
+
+    }
+    else{
+
+        $('#searchSimpleDiv').style.display='none';
+        $('#searchAdvancedDiv').style.display='block';
+
+        //new Effect.Fade('searchSimpleDiv', {duration:0.5, from:1, to:0});
+
+    }
+
+}
+
+function searchEntidadeChangeType(value){
+
+    if(value=='entidade'){
+
+        $('#table_advanced').style.display='';
+
+    }
+    else{
+
+        $('#table_advanced').style.display='none';
+
+    }
+
+}
+
+function showGrupoPerm(value,login){
+
+  showLoadingPopup();
+
+    var request = $.ajax({
+      url: 'modules/configuracoes/files/php/return_grupoperm.php',
+      type: "POST",
+      data: {value: value,login: login},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#showPermissoes').html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar showGrupoPerm: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function showGrupoPerm4(value,id_grupo){
+
+  showLoadingPopup();
+
+    var request = $.ajax({
+      url: 'modules/configuracoes/files/php/return_grupoperm4.php',
+      type: "POST",
+      data: {value: value,id_grupo: id_grupo},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#showPermissoes').html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar showGrupoPerm4: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function showGrupoPerm2(value,file,div){
+
+  showLoadingPopup();
+
+    var request = $.ajax({
+      url: 'modules/configuracoes/files/php/'+file+'.php',
+      type: "POST",
+      data: {value: value},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+div).html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar showGrupoPerm2: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function returnSelectLocais(inputID,divID,selectName){
+
+    showLoadingPopup();
+  
+    var value=$('#'+inputID).val();
+    var request = $.ajax({
+        url: 'modules/folhaobra/files/php/return_select_locais.php',
+        type: "POST",
+        data: {value: value,selectName:selectName},
+        dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divID).html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar returnSelectLocais: " + textStatus);
+    });
+    hideLoadingPopup();
+  
+}
+
+function returnSelectToponimia(inputID,divID,selectName,action){
+
+    showLoadingPopup();
+  
+    var value=$('#'+inputID).val();
+    var request = $.ajax({
+        url: 'modules/folhaobra/files/php/return_select_toponimia.php',
+        type: "POST",
+        data: {value: value,selectName:selectName,action:action},
+        dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divID).html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar returnSelectToponimia: " + textStatus);
+    });
+    hideLoadingPopup();
+  
+  
+}
+
+function getMoradaADJ(p,divID,css_classe,inputID){
+
+  showLoadingPopup();
+
+    var request = $.ajax({
+      url: 'modules/adj/files/php/return_moradas.php',
+      type: "POST",
+      data: {value: p,css_classe: css_classe, inputID: inputID},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divID).html(msg);
+        $('#moradaExpediente').select2();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar getMoradaADJ: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function searchEntidadeADJ(inputID,divID){
+
+    showLoadingPopup();
+    var value = $('#'+inputID).val();
+
+    var request = $.ajax({
+      url: 'modules/adj/files/php/return_entidades.php',
+      type: "POST",
+      data: {value: value},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divID).html(msg);
+        $('#entidadeExpediente').select2();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar searchEntidadeADJ: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function searchEntidadeElevadores(inputID,divID,selectID){
+
+  showLoadingPopup();
+  var value = $('#'+inputID).val();
+
+  var request = $.ajax({
+    url: 'modules/adj/files/php/return_entidades_elev.php',
+    type: "POST",
+    data: {value: value,selectID:selectID},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#'+divID).html(msg);
+      $('#'+selectID).select2();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar searchEntidadeElevadores: " + textStatus);
+  });
+  hideLoadingPopup();
+
+}
+
+function modalNewFOFromEventoStocks(indexReq){
+
+  const selReqs = [];
+  var i=0;
+  var values='';
+  for(i=0;i<=indexReq;i++){
+    values='';
+    if($.isNumeric($('#tr_req_id_'+i).val())){
+      values=$('#tr_req_tipo_'+i).val()+'__'+$('#tr_req_subtipo_'+i).val()+'__'+$('#tr_req_id_'+i).val()+'__'+$('#tr_req_qtd_'+i).val();
+      selReqs.push(values);
+    }
+  }
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_form_fo_eventos.php',
+    type: "POST",
+    data: {open:'modal',selReqs:selReqs},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalfolhaobra').html(msg);
+		$('#myModalAjaxFO').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalNewFOFromEventoStocks: " + textStatus);
+  });
+
+}
+
+function submitModalFOEventos(action){
+
+  showLoadingPopup();
+  var dataForm = $('#modalRuasAddForm').serializeArray();
+  dataForm.push({name: action, value: action});
+
+  $.post('modules/folhaobra/files/php/modal_form_fo_eventos.php',
+      //$('#modalAlertForm').serialize(), 
+      dataForm,
+      function(data, status, xhr){
+          $('#modalFOEventoContent').html(data);
+  });
+  hideLoadingPopup();
+
+}
+
+function modalFOMapCoords(id_folhaobra,id_folhaobra_coord,id_coords_inet,modal_type){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_show_fo_map.php',
+    type: "POST",
+    data: {id_folhaobra: id_folhaobra,id_folhaobra_coord: id_folhaobra_coord,id_coords_inet:id_coords_inet,modal_type:modal_type},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalFOMapCoords: " + textStatus);
+  });
+
+}
+
+function modalUpdateSyncNumFO(id){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_update_sync_numfo.php',
+    type: "POST",
+    data: {id: id},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalUpdateSyncNumFO: " + textStatus);
+  });
+
+}
+
+function showReqUsage(selID,data_inicial_evento,data_final_evento,tipo){
+
+  var id_d_requisito_subtipo=$('#'+selID).val();
+
+  if(id_d_requisito_subtipo>0 && data_inicial_evento!='' && data_final_evento!='' && tipo!=''){
+    showLoadingPopup();
+    var request = $.ajax({
+      url: 'modules/folhaobra/files/php/modal_req_details.php',
+      type: "POST",
+      data: {tipo:tipo ,id_d_requisito_subtipo:id_d_requisito_subtipo,data_inicial_evento: data_inicial_evento,data_final_evento: data_final_evento},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar showReqUsage: " + textStatus);
+    });
+  }
+  else{
+    var error='';
+    if(id_d_requisito_subtipo=='')
+      error+='- Falta o requisito\n';
+    if(data_inicial_evento=='')
+      error+='- Falta a data inicial do evento\n';
+    if(data_final_evento=='')
+      error+='- Falta a data final do evento';
+    if(tipo=='')
+      error+='- Falta o tipo de visualização';
+    alert('Erros detetados:\n'+error);
+  }
+
+}
+
+function showReqUsageDetails(id_d_requisito_subtipo,data_inicial_evento,data_final_evento,tipo){
+
+  if(data_inicial_evento!='' && data_final_evento!='' && tipo!=''){
+    showLoadingPopup();
+    var request = $.ajax({
+      url: 'modules/folhaobra/files/php/modal_req_details.php',
+      type: "POST",
+      data: {tipo:tipo ,id_d_requisito_subtipo:id_d_requisito_subtipo,data_inicial_evento: data_inicial_evento,data_final_evento: data_final_evento},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      $('#reqShowDetails').html(msg);
+      hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar showReqUsageDetails: " + textStatus);
+    });
+  }
+  else{
+    var error='';
+    if(id_d_requisito_subtipo=='')
+      error+='- Falta o requisito\n';
+    if(data_inicial_evento=='')
+      error+='- Falta a data inicial do evento\n';
+    if(data_final_evento=='')
+      error+='- Falta a data final do evento';
+    if(tipo=='')
+      error+='- Falta o tipo de visualização';
+    alert('Erros detetados:\n'+error);
+  }
+
+}
+
+
+function modalAssociarSinalizacao(id_folhaobra,id_folhaobra_servico){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_assoc_sinal.php',
+    type: "POST",
+    data: {id_folhaobra: id_folhaobra,id_folhaobra_servico: id_folhaobra_servico},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalAssociarSinalizacao: " + textStatus);
+  });
+
+}
+
+function searchAssocSinal(id_folhaobra,id_folhaobra_servico){
+
+  showLoadingPopup();
+  var table_sin=$('#table_sin').val();
+  var gid_sin=$('#gid_sin').val();
+  var search_coord=$('#search_coord').val();
+  var topo_sin=$('#topo_sin').val();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/return_assoc_sinal.php',
+    type: "POST",
+    data: {id_folhaobra: id_folhaobra,id_folhaobra_servico: id_folhaobra_servico, table_sin: table_sin, search_coord: search_coord,gid_sin:gid_sin,topo_sin:topo_sin},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+    $('#tableSinResults').html(msg);
+    hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    hideLoadingPopup();
+    alert("Erro ao executar searchAssocSinal: " + textStatus);
+  });
+
+}
+
+function iframeAssocSin(tipo_inet,id_folhaobra,id_folhaobra_inet,table_sin,gid_sin){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/return_iframe_sin.php',
+    type: "POST",
+    data: {tipo_inet: tipo_inet,id_folhaobra: id_folhaobra,id_folhaobra_inet: id_folhaobra_inet, table_sin: table_sin, gid_sin:gid_sin},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#iframeDIV').html(msg);
+      hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    hideLoadingPopup();
+    alert("Erro ao executar iframeAssocSin: " + textStatus);
+  });
+
+}
+
+function modalLocaisFrequentes(divID){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_locais_freq.php',
+    type: "POST",
+    data: {divID: divID},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalLocaisFrequentes: " + textStatus);
+  });
+
+}
+
+function selectLocalFreqAndClose(toID,id_locais_freq){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/return_selected_local_freq.php',
+    type: "POST",
+    data: {id_locais_freq: id_locais_freq},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+    $('#'+toID).html(msg);
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar selectLocalFreqAndClose: " + textStatus);
+  });
+  hideLoadingPopup();
+ 
+  $('#myModalAjax').modal('hide');
+
+}
+
+function modalReqFrequente(divID){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_req_freq.php',
+    type: "POST",
+    data: {divID: divID},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalReqFrequente: " + textStatus);
+  });
+
+}
+
+function selectReqFreqAndClose(toID,id_req_freq){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/return_selected_req_freq.php',
+    type: "POST",
+    data: {id_req_freq: id_req_freq},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+    $('#'+toID).html(msg);
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar selectReqFreqAndClose: " + textStatus);
+  });
+  hideLoadingPopup();
+ 
+  $('#myModalAjax').modal('hide');
+
+}
+
+function searchEntidadeADJ_FO(inputID,divID){
+
+  showLoadingPopup();
+    var value = $('#'+inputID).val();
+
+    var request = $.ajax({
+      url: 'modules/folhaobra/files/php/return_adj_entidades.php',
+      type: "POST",
+      data: {value: value},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#'+divID).html(msg);
+        hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      hideLoadingPopup();
+      alert("Erro ao executar searchEntidadeADJ_FO: " + textStatus);
+    });
+
+}
+
+
+function searchEntidadeExpediente(divID,selectID,inputSTR,css_classe){
+
+    if($('#'+inputSTR).val()!=''){
+
+      showLoadingPopup();
+        var value = $('#'+inputID).val();
+
+        var request = $.ajax({
+          url: 'modules/adj/files/php/return_entidades.php',
+          type: "POST",
+          data: {value: $('#'+inputSTR).value, selectID: selectID, css_classe: css_classe},
+          dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $('#'+divID).html(msg);
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+          alert("Erro ao executar searchEntidadeExpediente: " + textStatus);
+        });
+        hideLoadingPopup();
+
+    }
+    else
+        alert('Erro: Tem de escrever o nome da entidade');
+
+}
+
+function modalObrasEncAddEditInfo(id_folhaobra,id_empreendimento,id_empreendimento_edif,id_emp_edif_casa,id_obra,action,tipo,id,tipoform){
+
+    showLoadingPopup();
+    var request = $.ajax({
+    url: '../habitacaosocial2/modules/empreendimento/ajax/modal_obras_enc.php',
+    type: "POST",
+    data: {id_folhaobra:id_folhaobra,id_empreendimento: id_empreendimento,id_empreendimento_edif: id_empreendimento_edif,id_emp_edif_casa:id_emp_edif_casa,id_obra: id_obra,tipo: tipo, action: action, id_serv: id, tipoform: tipoform},
+    dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#mymodalgeralajaxExtra').html(msg);
+        $('#myModalAjaxExtra').modal('show');
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalObrasEncAddEditInfo: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function modalVerObrasHSInfo(tipo,id_folhaobra,id_obra){
+
+	showLoadingPopup()
+	var request = $.ajax({
+	url: 'modules/folhaobra/files/php/modal_hs_obra.php',
+	type: "POST",
+	data: {tipo:tipo,id_folhaobra:id_folhaobra,id_obra:id_obra},
+	dataType: "html"
+	});
+
+	request.done(function(msg) {
+    $('#mymodalgeralajax').html(msg);
+    $('#myModalAjax').modal('show');
+		hideLoadingPopup();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		hideLoadingPopup();
+	    alert("Erro ao executar modalVerObrasHSInfo: " + textStatus);
+	});
+
+}
+
+function folhaobraOpenModal(id_folhaobra,path){
+
+	showLoadingPopup()
+	var request = $.ajax({
+	url: path+'modules/folhaobra/files/php/modal_folhaobra.php',
+	type: "POST",
+	data: {id_folhaobra: id_folhaobra},
+	dataType: "html"
+	});
+
+	request.done(function(msg) {
+		$('#mymodalfolhaobra').html(msg);
+		$('#myModalFolhaObraAjax').modal('show');
+		hideLoadingPopup();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		hideLoadingPopup();
+	alert("Erro ao executar folhaobraOpenModal: " + textStatus);
+	});
+
+}
+
+function servicosOpenModal(id_folhaobra,id_servico){
+
+	showLoadingPopup()
+	var request = $.ajax({
+	url: 'modules/folhaobra/files/php/modal_servicos.php',
+	type: "POST",
+	data: {id_folhaobra: id_folhaobra, id_servico: id_servico},
+	dataType: "html"
+	});
+
+	request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		hideLoadingPopup();
+	alert("Erro ao executar servicosOpenModal: " + textStatus);
+	});
+
+}
+
+function servicosEstilosOpenModal(){
+
+	showLoadingPopup()
+	var request = $.ajax({
+	url: 'modules/configuracoes/files/php/modal_servicos_estilos.php',
+	type: "POST",
+	data: {},
+	dataType: "html"
+	});
+
+	request.done(function(msg) {
+		$('#mymodalfolhaobra').html(msg);
+		$('#myModalFolhaObraAjax').modal('show');
+		hideLoadingPopup();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		hideLoadingPopup();
+	alert("Erro ao executar servicosEstilosOpenModal: " + textStatus);
+	});
+
+}
+
+function modalCorrigirDatas(id_folhaobra,id_servico,ano){
+
+	showLoadingPopup()
+	var request = $.ajax({
+    url: 'modules/folhaobra/files/php/modal_corrigir_datas.php',
+    type: "POST",
+    data: {id_folhaobra: id_folhaobra, id_servico: id_servico,ano:ano},
+    dataType: "html"
+	});
+
+	request.done(function(msg) {
+		$('#mymodalgeralajax').html(msg);
+		$('#myModalAjax').modal('show');
+		hideLoadingPopup();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		hideLoadingPopup();
+	alert("Erro ao executar modalCorrigirDatas: " + textStatus);
+	});
+
+}
+
+/***************************
+
+** PARA FAZER E CONFIRMAR **
+
+****************************/
+
+//alterar tipo de ordenação nos relatorios
+function returnRelatorioOrderBy(){
+
+    var i='';
+    var radio_check_val = "";
+    for (i = 0; i < document.getElementsByName('tiporelatorio').length; i++) {
+        if (document.getElementsByName('tiporelatorio')[i].checked) {
+            //alert("this radio button was clicked: " + document.getElementsByName('tiporelatorio')[i].value);
+            radio_check_val = document.getElementsByName('tiporelatorio')[i].value;
+        }
+    }
+
+    if(radio_check_val!=''){
+
+          showLoadingPopup();
+          var request = $.ajax({
+            url: 'modules/relatorios/files/php/return_orderby.php',
+            type: "POST",
+            data: {tipo_rel: radio_check_val},
+            dataType: "html"
+          });
+
+          request.done(function(msg) {
+              $('#orderByDIV').html(msg);
+          });
+
+          request.fail(function(jqXHR, textStatus) {
+            alert("Erro ao executar returnRelatorioOrderBy: " + textStatus);
+          });
+          hideLoadingPopup();
+
+    }
+    else{
+        alert('Escolha um relatório');
+    }
+
+}
+
+/*************
+ * ETIQUETAS *
+ *************/
+
+function chooseNewEtiquetaColors(colorID,tipo,previewID,color){
+
+    var divTemplate='#div_'+previewID;
+		var inputTemplate='#input_'+colorID;
+		
+    //var spanTemplate='#span_'+colorID;
+
+    //ver cor antiga e atualizar X da tabela de cores
+		var oldColor = $(inputTemplate).val();
+		var oldSpanTemplate='#span_'+colorID+'_'+oldColor;
+    $(oldSpanTemplate).html('&nbsp;');
+    var newSpanTemplate='#span_'+colorID+'_'+color;
+    $(newSpanTemplate).html('<b>&nbsp;X</b>');
+
+		//atualizar background e color do preview
+    if(tipo=='background')
+        $(divTemplate).css('background-color','#'+color);
+    if(tipo=='text')
+        $(divTemplate).css('color','#'+color);
+    //atualizar valor do input
+    $(inputTemplate).val(color);
+
+}
+
+function etiquetaRemove(id,etiquetasDIV_1,etiquetasDIV_2,etiqueta,showEditButton,from){
+    
+    var checkDelete=confirm('Remover a etiqueta '+etiqueta+'?');
+
+    if(checkDelete==true){
+
+        showLoadingPopup();
+        
+        var request = $.ajax({
+            url: 'modules/folhaobra/files/php/etiqueta_remove.php',
+            type: "POST",
+            data: {id: id, etiquetasDIV_1: etiquetasDIV_1,etiquetasDIV_2: etiquetasDIV_2,showEditButton:showEditButton,from:from},
+            dataType: "html"
+        });
+
+        request.done(function(msg) {
+            if(etiquetasDIV_1!='')
+                $('#'+etiquetasDIV_1).html(msg);
+            if(etiquetasDIV_2!='')
+                $('#'+etiquetasDIV_2).html(msg);
+            //$('#etiquetasListaDiv').html(msg);
+
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+            alert("Erro ao executar etiquetaRemove: " + textStatus);
+        });
+        hideLoadingPopup();
+    
+    }
+
+}
+
+function etiquetaDelete(id,id_folhaobra_fo,id_folhaobra_sec,etiquetasDIV_1,etiquetasDIV_2,showEditButton,from){
+
+    showLoadingPopup();
+    
+    var request = $.ajax({
+        url: 'modules/folhaobra/files/php/modal_etiqueta_delete.php',
+        type: "POST",
+        data: {id: id,id_folhaobra_fo:id_folhaobra_fo,id_folhaobra_sec: id_folhaobra_sec, etiquetasDIV_1: etiquetasDIV_1,etiquetasDIV_2: etiquetasDIV_2,showEditButton:showEditButton,from:from,open:'modal'},
+        dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#mymodalgeralajax').html(msg);
+        $('#myModalAjax').modal('show');
+        hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar etiquetaDelete: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function submitModalEtiquetaDel(action){
+
+    showLoadingPopup();
+    var dataForm = $('#modalEtiquetaDelForm').serializeArray();
+    dataForm.push({name: action, value: action});
+
+    $.post('modules/folhaobra/files/php/modal_etiqueta_delete.php',
+        //$('#modalAlertForm').serialize(), 
+        dataForm,
+        function(data, status, xhr){
+            $('#modalEtiquetaDelContent').html(data);
+    });
+    hideLoadingPopup();
+
+}
+
+
+function modalNovaEtiqueta(from,id_folhaobra,id_folhaobra_sec,etiquetasDIV_1,etiquetasDIV_2){
+
+    showLoadingPopup();
+    var request = $.ajax({
+        url: 'modules/folhaobra/files/php/modal_nova_etiqueta.php',
+        type: "POST",
+        data: {id_folhaobra:id_folhaobra,id_folhaobra_sec:id_folhaobra_sec,from:from,open:'modal',etiquetasDIV_1: etiquetasDIV_1,etiquetasDIV_2: etiquetasDIV_2},
+        dataType: "html"
+    });
+
+    request.done(function(msg) {
+        $('#mymodalgeralajax').html(msg);
+        $('#myModalAjax').modal('show');
+        hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar modalNovaEtiqueta: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+function submitModalEtiquetaAdd(action){
+
+    showLoadingPopup();
+    var dataForm = $('#modalEtiquetaAddForm').serializeArray();
+    dataForm.push({name: action, value: action});
+
+    $.post('modules/folhaobra/files/php/modal_nova_etiqueta.php',
+        //$('#modalAlertForm').serialize(), 
+        dataForm,
+        function(data, status, xhr){
+            $('#modalEtiquetaAddContent').html(data);
+    });
+    hideLoadingPopup();
+
+}
+
+function updateEtiqueta(id_folhaobra,id_folhaobra_sec,etiquetasDIV_1,etiquetasDIV_2,showEditButton,from){
+    
+    showLoadingPopup();
+    
+    var request = $.ajax({
+        url: 'modules/folhaobra/files/php/update_etiqueta.php',
+        type: "POST",
+        data: {id_folhaobra: id_folhaobra, id_folhaobra_sec:id_folhaobra_sec,etiquetasDIV_1: etiquetasDIV_1,etiquetasDIV_2: etiquetasDIV_2,showEditButton:showEditButton,from:from},
+        dataType: "html"
+    });
+
+    request.done(function(msg) {
+        if(etiquetasDIV_1!='')
+            $('#'+etiquetasDIV_1).html(msg);
+        if(etiquetasDIV_2!='')
+            $('#'+etiquetasDIV_2).html(msg);
+        //$('#etiquetasListaDiv').html(msg);
+
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+        alert("Erro ao executar updateEtiqueta: " + textStatus);
+    });
+    hideLoadingPopup();
+
+}
+
+
+function obrasEmpShowEncaminhamento(divID,value){
+
+    if(value==1){
+        $(divID).show();
+    }
+    else{
+        $(divID).hide();
+    }
+
+}
+
+function modalShowTemplates(){
+
+  showLoadingPopup();
+  var request = $.ajax({
+      url: 'modules/folhaobra/files/php/modal_show_templates.php',
+      type: "POST",
+      data: {},
+      dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar modalShowTemplates: " + textStatus);
+  });
+  hideLoadingPopup();
+
+}
+
+function modalFOAddRuas(id_folhaobra){
+
+  showLoadingPopup();
+  var request = $.ajax({
+      url: 'modules/folhaobra/files/php/modal_fo_add_ruas.php',
+      type: "POST",
+      data: {id_folhaobra:id_folhaobra,open:'modal'},
+      dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar modalFOAddRuas: " + textStatus);
+  });
+  hideLoadingPopup();
+
+}
+
+function submitModalRuasAdd(action,id_toponimia){
+
+  showLoadingPopup();
+  var dataForm = $('#modalRuasAddForm').serializeArray();
+  dataForm.push({name: action, value: action});
+  if(id_toponimia!=''){
+    dataForm.push({name: 'id_toponimia', value: id_toponimia});
+  }
+
+  $.post('modules/folhaobra/files/php/modal_fo_add_ruas.php',
+      //$('#modalAlertForm').serialize(), 
+      dataForm,
+      function(data, status, xhr){
+          $('#modalRuasAddContent').html(data);
+  });
+  hideLoadingPopup();
+
+}
+
+function returnFOUpdateListRuas(id_folhaobra,divID){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/folhaobra/files/php/return_fo_list_ruas.php',
+    type: "POST",
+    data: {id_folhaobra: id_folhaobra},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+    $('#'+divID).html(msg);
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar returnFOUpdateListRuas: " + textStatus);
+  });
+  hideLoadingPopup();
+  
+  $('#myModalAjax').modal('hide');
+
+}
+
+function modalFrasesPersonalizadas(input_id){
+
+  showLoadingPopup();
+  var request = $.ajax({
+      url: 'modules/folhaobra/files/php/modal_frases.php',
+      type: "POST",
+      data: {input_id:input_id,open:'modal'},
+      dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar modalFrasesPersonalizadas: " + textStatus);
+  });
+  hideLoadingPopup();
+
+}
+
+function submitModalFrasesAdd(action,id_frase){
+
+  showLoadingPopup();
+  var dataForm = $('#modalFrasesAddForm').serializeArray();
+  dataForm.push({name: action, value: action});
+  if(id_frase!='')
+    dataForm.push({name: 'id_frase', value: id_frase});
+
+  $.post('modules/folhaobra/files/php/modal_frases.php',
+      //$('#modalAlertForm').serialize(), 
+      dataForm,
+      function(data, status, xhr){
+          $('#modalFrasesAddContent').html(data);
+  });
+  hideLoadingPopup();
+
+}
+
+function selectFraseAndClose(readFrom,fromID,toID,id_frase){
+
+  if(readFrom=='textarea'){
+    $('#'+toID).val($('#'+fromID).val());
+  }
+  else{
+    showLoadingPopup();
+    var request = $.ajax({
+      url: 'modules/folhaobra/files/php/return_selected_frase.php',
+      type: "POST",
+      data: {id_frase: id_frase},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      var currentValue=$('#'+toID).val();
+      var space='';
+      if(currentValue!='')
+        space=' ';
+      $('#'+toID).val(currentValue+space+msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar selectFraseAndClose: " + textStatus);
+    });
+    hideLoadingPopup();
+  }
+  
+  $('#myModalAjax').modal('hide');
+
+}
+
+function returnEventoRequisitoSubtipo(value,tipo,divID){
+
+  showLoadingPopup();
+
+  var request = $.ajax({
+    url: '../gestaoeventos/modules/evento/php/return_subtipo.php',
+    type: "POST",
+    data: {value:value, tipo:tipo},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+      $('#'+divID).html(msg);
+      hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    hideLoadingPopup();
+    alert("Erro ao executar returnEventoRequisitoSubtipo: " + textStatus);
+  });
+
+}
+
+function modalElevadorAddInfo(id_elevador){
+
+  var info=$('#add_elevador_info').val();
+  if(info=='proprietario' || info=='gestaocondominio' || info=='manutencao' || info=='inspecao' || info=='nota' || info=='documento'){
+    showLoadingPopup();
+    var request = $.ajax({
+      url: 'modules/elevadores/files/modal_info.php',
+      type: "POST",
+      data: {id_elevador:id_elevador,tipo_info: info,action:'new'},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar modalElevadorAddInfo: " + textStatus);
+    });
+  }
+
+}
+
+function modalElevadorInfo(info,id_elevador,id_info,action){
+
+  if(info=='proprietario' || info=='gestaocondominio' || info=='manutencao' || info=='inspecao' || info=='nota' || info=='documento'){
+    showLoadingPopup();
+    var request = $.ajax({
+      url: 'modules/elevadores/files/modal_info.php',
+      type: "POST",
+      data: {id_elevador:id_elevador,tipo_info: info,id_info:id_info,action:action},
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      $('#mymodalgeralajax').html(msg);
+      $('#myModalAjax').modal('show');
+      hideLoadingPopup();
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert("Erro ao executar modalElevadorInfo: " + textStatus);
+    });
+  }
+
+}
+
+
+function modalElevadorInspecao(id_info,id_elevador){
+
+  showLoadingPopup();
+  var request = $.ajax({
+    url: 'modules/elevadores/files/modal_inspecao.php',
+    type: "POST",
+    data: {id_elevador:id_elevador,id_info:id_info},
+    dataType: "html"
+  });
+
+  request.done(function(msg) {
+    $('#mymodalgeralajax').html(msg);
+    $('#myModalAjax').modal('show');
+    hideLoadingPopup();
+  });
+
+  request.fail(function(jqXHR, textStatus) {
+    alert("Erro ao executar modalElevadorInspecao: " + textStatus);
+  });
+
+}
+

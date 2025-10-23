@@ -1,0 +1,203 @@
+
+/*
+ * Callouts
+ *
+ * Not quite alerts, but custom and helpful notes for folks reading the docs.
+ * Requires a base and modifier class.
+ * https://cpratt.co/twitter-bootstrap-callout-css-styles/
+ */
+.bs-callout {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-left-width: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #000;
+}
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.bs-callout h5 {
+  margin-top: 0;
+  margin-bottom: 1px;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code {
+    border-radius: 3px;
+}
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+.bs-callout-default {
+    border-left-color: #777;
+    background-color: #f4f8fa;
+}
+.bs-callout-default h4, .bs-callout-default h5 {
+    color: #777;
+}
+.bs-callout-primary {
+    background-color: #fcfcfc;
+    border-left-color: #428bca;
+}
+.bs-callout-primary h4, .bs-callout-primary h5 {
+    color: #428bca;
+}
+.bs-callout-success {
+    background-color: #f7fdf7;
+    border-left-color: #5cb85c;
+}
+.bs-callout-success h4, .bs-callout-success h5 {
+    color: #5cb85c;
+}
+.bs-callout-danger {
+    background-color: #fdf7f7;
+    border-left-color: #d9534f;
+}
+.bs-callout-danger h4,.bs-callout-danger h5 {
+    color: #d9534f;
+}
+.bs-callout-warning {
+    background-color: #faf8f0;
+    border-left-color: #f0ad4e;
+}
+.bs-callout-warning h4, .bs-callout-warning h5 {
+    color: #f0ad4e;
+}
+.bs-callout-info {
+    background-color: #f4f8fa;
+    border-left-color: #5bc0de;
+}
+.bs-callout-info h4, .bs-callout-info h5 {
+    color: #5bc0de;
+}
+
+
+/*
+FORM STEPS
+https://bootsnipp.com/snippets/VR1lR
+*/
+.bs-vertical-wizard {
+
+}
+
+.bs-vertical-wizard ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bs-vertical-wizard ul>li {
+    display: block;
+    position: relative;
+}
+
+.bs-vertical-wizard ul>li>span {
+    display: block;
+    padding: 10px 10px 15px 30px;
+    color: #333c4e;
+    font-size: 13px;
+}
+
+.bs-vertical-wizard ul>li>span.bottomborder {
+    border-bottom: 1px solid #ddd;
+}
+
+.bs-vertical-wizard ul>li>span:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 25px);
+    background-color: #bdc2ce;
+    left: 13px;
+    bottom: -9px;
+    z-index: 3;
+}
+
+.bs-vertical-wizard ul>li>span .ico {
+    pointer-events: none;
+    font-size: 22px;
+    position: absolute;
+    left: 10px;
+    top: 11px;
+    z-index: 2;
+}
+
+.bs-vertical-wizard ul>li>span:after {
+    content: '';
+    position: absolute;
+    border: 2px solid #bdc2ce;
+    border-radius: 50%;
+    top: 11px;
+    left: 6px;
+    width: 16px;
+    height: 16px;
+    z-index: 3;
+}
+
+.bs-vertical-wizard ul>li>span .desc {
+    display: block;
+    color: #000;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.bs-vertical-wizard ul>li.complete>span:before {
+    background-color: #5cb85c;
+    opacity: 1;
+    height: calc(100% - 25px);
+    bottom: -9px;
+}
+
+.bs-vertical-wizard ul>li.complete>span:after {display:none;}
+.bs-vertical-wizard ul>li.current>span:after {display:none;}
+.bs-vertical-wizard ul>li.locked>span:after {display:none;}
+.bs-vertical-wizard ul>li.title>span:after {display:none;}
+.bs-vertical-wizard ul>li:last-child>span:before {display:none;}
+
+.bs-vertical-wizard ul>li.complete>span .ico {
+    left: 4px;
+}
+.bs-vertical-wizard ul>li.current>span .ico {
+    left: 4px;
+}
+.bs-vertical-wizard ul>li.title>span .ico {
+    left: 4px;
+}
+.bs-vertical-wizard ul>li.locked>span .ico {
+    left: 7px;
+}
+
+.bs-vertical-wizard ul>li>span .ico.ico-green {
+    color: #5cb85c;
+}
+.bs-vertical-wizard ul>li>span .ico.ico-blue {
+    color: #3C78D8;
+}
+.bs-vertical-wizard ul>li>span .ico.ico-red {
+    color: #f91818;
+}
+.bs-vertical-wizard ul>li>span .ico.ico-yellow {
+    color: #ffc55b;
+}
+
+.bs-vertical-wizard ul>li>span .ico.ico-muted {
+    color: #bdc2ce;
+}
+
+.bs-vertical-wizard ul>li.title {
+    background-color: #fff;
+    border-top: 1px solid #aaaaaa;
+    border-bottom: 1px solid #aaaaaa;
+    background-color: #eeeeee;
+}
+
+.bs-vertical-wizard ul>li.current {
+    background-color: #fff;
+    border-top: 1px solid #7bc95e;
+    border-bottom: 1px solid #7bc95e;
+    background-color: #e1ffd6;
+}

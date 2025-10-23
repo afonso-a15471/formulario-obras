@@ -1,0 +1,132 @@
+.fc-day-grid-event > .fc-content {
+    white-space: normal!important;
+}
+
+.label-evento{
+	font-size:10px;
+	color:#000000!important;
+}
+
+/* calendar event styles */
+.evento_festas{
+    cursor: pointer;
+    background-color:#ffffcc!important;
+    color:#000000!important;
+}
+.evento_pedreiros{
+    cursor: pointer;
+    background-color:#89d79f!important;
+    color:#000000!important;
+}
+.evento_canalizador{
+    cursor: pointer;
+    background-color:#74d3ff!important;
+    color:#000000!important;
+}
+.evento_carpinteiros{
+    cursor: pointer;
+    background-color:#ffd9b3!important;
+    color:#000000!important;
+}
+.evento_calceteiros{
+    cursor: pointer;
+    background-color:#ffccff!important;
+    color:#000000!important;
+}
+.evento_som{
+    cursor: pointer;
+    background-color:#ffddcc!important;
+    color:#000000!important;
+}
+.evento_serralharia{
+    cursor: pointer;
+    background-color:#fc7a64!important;
+    color:#000000!important;
+}
+.evento_armazem{
+    cursor: pointer;
+    background-color:#88ecd9!important;
+    color:#000000!important;
+}
+.evento_eletricidade{
+    cursor: pointer;
+    background-color:#a9c173!important;
+    color:#000000!important;
+}
+.evento_maquinas{
+    cursor: pointer;
+    background-color:#66e873!important;
+    color:#000000!important;
+}
+.evento_manespjogorecreio{
+    cursor: pointer;
+    background-color:#ebe678!important;
+    color:#000000!important;
+}
+.evento_equipamultifuncional{
+    cursor: pointer;
+    background-color:#f9c61c!important;
+    color:#000000!important;
+}
+.evento_oficina{
+    cursor: pointer;
+    background-color:#d09baf!important;
+    color:#000000!important;
+}
+.evento_transporte{
+    cursor: pointer;
+    background-color:#89e2b3!important;
+    color:#000000!important;
+}
+.evento_transito{
+    cursor: pointer;
+    background-color:#0ebbc5!important;
+    color:#000000!important;
+}
+
+
+.evento_estilo1{
+    cursor: pointer;
+    background-color:#bba3c5!important;
+    color:#000000!important;
+}
+.evento_estilo2{
+    cursor: pointer;
+    background-color:#ffa4fa!important;
+    color:#000000!important;
+}
+.evento_estilo3{
+    cursor: pointer;
+    background-color:#11b51d!important;
+    color:#000000!important;
+}
+.evento_estilo4{
+    cursor: pointer;
+    background-color:#afafaf!important;
+    color:#000000!important;
+}
+.evento_estilo5{
+    cursor: pointer;
+    background-color:#f775a6!important;
+    color:#000000!important;
+}
+.evento_estilo6{
+    cursor: pointer;
+    background-color:#89aa72!important;
+    color:#000000!important;
+}
+.evento_estilo7{
+    cursor: pointer;
+    background-color:#abeee8!important;
+    color:#000000!important;
+}
+.evento_estilo8{
+    cursor: pointer;
+    background-color:#ff3e3e!important;
+    color:#000000!important;
+}
+.evento_estilo9{
+    cursor: pointer;
+    background-color:#6aff00!important;
+    color:#000000!important;
+}
