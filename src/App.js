@@ -9,7 +9,11 @@ function App() {
   return (
     <div className="grid xs:grid-cols-4 md:grid-cols-8 xl:grid-cols-12 gap-16">
       <div className="xs:col-span-4 md:col-span-8 xl:col-span-12 py-16">
-        <h1 className="text-2xl-bold p-16">Folha de Obra - Registo</h1>
+
+        <h1 className="text-2xl-bold p-16">
+          Folha de Obra - Registo
+        </h1>
+
       </div>
       <div className="xs:col-span-4 md:col-span-8 xl:col-span-12 py-16 px-16">
         <Tabs>
@@ -41,9 +45,24 @@ function App() {
                           <DropdownOption value="3">
                             Manutenção de edifícios desportivos
                           </DropdownOption>
+
+                           <DropdownOption value="2">
+                            Manutenção de escolas
+                          </DropdownOption>
+                         <DropdownOption value="5">
+                            Manutenção de espaços publicos
+                          </DropdownOption>
+
+                           <DropdownOption value="4">
+                            Manutenção de outros edifícios
+                          </DropdownOption>
                           
                         </DropdownSection>
                       </InputSelect>
+
+                      <div class="bs-callout bs-callout-primary">
+                <h5><b>Resumo dos Serviços Efetuados</b></h5>Serviço de transporte de equipamentos e mobiliário, arquivo, etc.
+            </div>
 
                     </div>
                   </Accordion>
